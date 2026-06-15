@@ -1,12 +1,14 @@
 package entities;
 
+import java.util.Objects;
+
 public class Address {
     private String street;
-    private int number;
+    private Integer number;
     private String city;
     private String country;
 
-    public Address(String street, int number, String city, String country) {
+    public Address(String street, Integer number, String city, String country) {
         this.street = street;
         this.number = number;
         this.city = city;
@@ -43,5 +45,26 @@ public class Address {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Address address)) return false;
+        return Objects.equals(street, address.street) && Objects.equals(number, address.number) && Objects.equals(city, address.city) && Objects.equals(country, address.country);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(street, number, city, country);
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "street='" + street + '\'' +
+                ", number=" + number +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                '}';
     }
 }
