@@ -6,29 +6,20 @@ public class User {
     private Integer id;
     private String username;
     private String email;
-    private Address address;
 
     public User (){}
 
-    public User(int id, String username, String email) {
+    public User(Integer id, String username, String email) {
         this.id = id;
         this.username = username;
         this.email = email;
-        this.address = null;
     }
 
-    public User(Integer id, String username, String email, Address address) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.address = address;
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -48,19 +39,15 @@ public class User {
         this.email = email;
     }
 
-    public Address getAddress() {return address;}
-
-    public void setAddress(Address address) {this.address = address;}
-
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof User user)) return false;
-        return Objects.equals(username, user.username) && Objects.equals(email, user.email) && Objects.equals(address, user.address);
+        return Objects.equals(username, user.username) && Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, email, address);
+        return Objects.hash(username, email);
     }
 
     @Override
@@ -69,7 +56,6 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", address=" + address +
                 '}';
     }
 }
