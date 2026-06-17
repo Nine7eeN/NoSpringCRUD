@@ -3,18 +3,28 @@ package application;
 import dao.UserDAO;
 import entities.User;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-
 public class Program {
     public static void main(String[] args) {
-        User user = new User(null, "maria", "maria@gmail.com");
 
         UserDAO userDAO = new UserDAO();
-        userDAO.save(user);
 
-        System.out.println("Salvo com id: " + user.getId());
+        //SALVANDO USUARIO
+
+        /*User user = new User(null, "carlosrosa3", "carlos3.rosa@gmail.com");
+        userDAO.save(user);*/
+
+        //CARREGANDO USUARIOS
+
+        /*for (User u : userDAO.load()) {
+            System.out.println(u);
+        }*/
+
+        //ALTERANDO USUARIO
+
+        /*userDAO.update(1, "joao", "joao@gmail.com");*/
+
+        // DELETANDO USUARIO
+
+            userDAO.delete(1);
     }
 }
