@@ -3,12 +3,11 @@ package application;
 import dao.UserDAO;
 import entities.User;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
     public static void openMenu(){
-        Scanner sc = new Scanner(System.in);
-
         System.out.println("===SISTEMA DE GERENCIAMENTO DE USUARIOS===");
         System.out.println("Escolha uma opção:");
         System.out.println("1. Cadastrar Usuário");
@@ -18,43 +17,53 @@ public class Menu {
         System.out.println("0. Sair");
     }
 
-    private static String read(){
-        Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-        sc.close();
-        return input;
-    }
-
-    public static void chooseOption(char option){
+    public static void chooseOption(char option, Scanner sc){
         UserDAO userDAO = new UserDAO();
+
         switch (option) {
             case '1':
-                System.out.println("Insira os dados do usuário a ser registrado: ");
-                System.out.println("Ex: nome, email");
-                String[] data = read().split(",");
-                User user = new User(null, data[0].trim(), data[1].trim());
-                userDAO.save(user);
+                try {
+                    System.out.println("Insira os dados do usuário a ser registrado: ");
+                    System.out.println("Ex: nome, email");
+                    String[] data = sc.nextLine().split(",");
+                    User userToSave = new User(null, data[0].trim(), data[1].trim());
+                    userDAO.save(userToSave);
+                } catch (RuntimeException e){
+                    System.out.println("Erro: " + e.getMessage());
+                }
                 break;
             case '2':
-                System.out.println("Listando usuários...");
-                userDAO.load();
+                try {
+                    System.out.println("Listando usuários...");
+                    List<User> userList = userDAO.load();
+                    for (User user : userList) {
+                        System.out.println(user);
+                    }
+                    System.out.println("Aperte [Enter] para continuar.");
+                    sc.nextLine();
+                } catch (RuntimeException e) {
+                    System.out.println("Erro: " + e.getMessage());
+                }
                 break;
             case '3':
                 System.out.println("Insira o ID do usuário que deseja atualizar: ");
-                try {
-                    int id = Integer.parseInt(read());
+                try  {
+                    int id = Integer.parseInt(sc.nextLine());
+                    System.out.println("Insira os novos dados do usuário: ");
+                    System.out.println("Ex: nome, email");
+                    String[] newData = sc.nextLine().split(",");
+                    userDAO.update(id, newData[0].trim(), newData[1].trim());
                 } catch (RuntimeException e) {
-                    System.out.println("ID inválido. Tente novamente.");
-                    e.printStackTrace();;
+                    System.out.println("Erro. Tente novamente.");
                 }
                 break;
             case '4':
                 System.out.println("Insira o ID do usuário que deseja excluir:");
                 try {
-                    int id = Integer.parseInt(read());
+                    int id = Integer.parseInt(sc.nextLine());
+                    userDAO.delete(id);
                 } catch (RuntimeException e) {
-                    System.out.println("ID inválido. Tente novamente.");
-                    e.printStackTrace();;
+                    System.out.println("Erro. Tente novamente.");
                 }
                 break;
             case '0':
