@@ -3,6 +3,7 @@ package application;
 import dao.UserDAO;
 import entities.User;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Scanner;
 
@@ -29,7 +30,11 @@ public class Menu {
                     User userToSave = new User(null, data[0].trim(), data[1].trim());
                     userDAO.save(userToSave);
                 } catch (RuntimeException e){
-                    System.out.println("Erro: " + e.getMessage());
+                    System.out.println("ERRO!");
+                    System.out.println("Tipo:" + e.getClass().getName());
+                    System.out.println("Mensagem" + e.getMessage());
+                    e.printStackTrace();
+                    System.out.println("Voltando para a tela inicial...");
                 }
                 break;
             case '2':
@@ -42,7 +47,11 @@ public class Menu {
                     System.out.println("Aperte [Enter] para continuar.");
                     sc.nextLine();
                 } catch (RuntimeException e) {
-                    System.out.println("Erro: " + e.getMessage());
+                    System.out.println("ERRO!");
+                    System.out.println("Tipo:" + e.getClass().getName());
+                    System.out.println("Mensagem" + e.getMessage());
+                    e.printStackTrace();
+                    System.out.println("Voltando para a tela inicial...");
                 }
                 break;
             case '3':
@@ -54,7 +63,11 @@ public class Menu {
                     String[] newData = sc.nextLine().split(",");
                     userDAO.update(id, newData[0].trim(), newData[1].trim());
                 } catch (RuntimeException e) {
-                    System.out.println("Erro. Tente novamente.");
+                    System.out.println("ERRO!");
+                    System.out.println("Tipo:" + e.getClass().getName());
+                    System.out.println("Mensagem" + e.getMessage());
+                    e.printStackTrace();
+                    System.out.println("Voltando para a tela inicial...");
                 }
                 break;
             case '4':
@@ -63,7 +76,11 @@ public class Menu {
                     int id = Integer.parseInt(sc.nextLine());
                     userDAO.delete(id);
                 } catch (RuntimeException e) {
-                    System.out.println("Erro. Tente novamente.");
+                    System.out.println("ERRO!");
+                    System.out.println("Tipo:" + e.getClass().getName());
+                    System.out.println("Mensagem" + e.getMessage());
+                    e.printStackTrace();
+                    System.out.println("Voltando para a tela inicial...");
                 }
                 break;
             case '0':
