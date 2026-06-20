@@ -7,13 +7,17 @@ import java.util.Scanner;
 
 public class Program {
     public static void main(String[] args) {
-        char option = '0';
+        char option = ' ';
         Scanner sc = new Scanner(System.in);
 
         do {
-            Menu.openMenu();
-            option = sc.nextLine().toUpperCase().charAt(0);
-            Menu.chooseOption(option, sc);
+            try {
+                Menu.openMenu();
+                option = sc.nextLine().toUpperCase().charAt(0);
+                Menu.chooseOption(option, sc);
+            }catch (StringIndexOutOfBoundsException e){
+                System.out.println("Escolha uma das opções.");
+            }
         } while (option != '0');
 
         sc.close();

@@ -29,6 +29,9 @@ public class Menu {
                     String[] data = sc.nextLine().split(",");
                     User userToSave = new User(null, data[0].trim(), data[1].trim());
                     userDAO.save(userToSave);
+                } catch (ArrayIndexOutOfBoundsException e){
+                    System.out.println("Erro: você precisa inserir ao menos dois dados para cadastrar um usuário!");
+                    System.out.println("Voltando para a tela inicial...");
                 } catch (RuntimeException e){
                     System.out.println("ERRO!");
                     System.out.println("Tipo:" + e.getClass().getName());
@@ -62,6 +65,14 @@ public class Menu {
                     System.out.println("Ex: nome, email");
                     String[] newData = sc.nextLine().split(",");
                     userDAO.update(id, newData[0].trim(), newData[1].trim());
+                } catch (ArrayIndexOutOfBoundsException e){
+                    System.out.println("Erro: você precisa inserir ao menos dois dados para atualizar um usuário!");
+                    System.out.println("Pressione [Enter] para voltar para a tela inicial.");
+                    sc.nextLine();
+                } catch (NumberFormatException e) {
+                    System.out.println("Erro: Formato de ID inválido!");
+                    System.out.println("Pressione [Enter] para voltar para a tela inicial.");
+                    sc.nextLine();
                 } catch (RuntimeException e) {
                     System.out.println("ERRO!");
                     System.out.println("Tipo:" + e.getClass().getName());
@@ -75,6 +86,10 @@ public class Menu {
                 try {
                     int id = Integer.parseInt(sc.nextLine());
                     userDAO.delete(id);
+                } catch (NumberFormatException e){
+                    System.out.println("Erro: Formato de ID inválido!");
+                    System.out.println("Pressione [Enter] para voltar para a tela inicial.");
+                    sc.nextLine();
                 } catch (RuntimeException e) {
                     System.out.println("ERRO!");
                     System.out.println("Tipo:" + e.getClass().getName());

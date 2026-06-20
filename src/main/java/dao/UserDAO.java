@@ -3,10 +3,7 @@ package dao;
 import db.ConnectionFactory;
 import entities.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +25,9 @@ public class UserDAO {
                 }
             }
             System.out.println("Usuário " + user.getUsername() + ", " + "ID #" + user.getId() + " salvo com sucesso.");
-        }catch(SQLException e) {
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new RuntimeException("Dados duplicados. O Email ou nome de usuário já está em uso.", e);
+        } catch (SQLException e) {
                 throw new RuntimeException("Erro ao salvar usuário: " + e.getMessage());
         }
     }
@@ -46,7 +45,7 @@ public class UserDAO {
                 user.setEmail(results.getString("email"));
                 users.add(user);
             }
-        }catch (SQLException e){
+        } catch (SQLException e){
             throw new RuntimeException("Falha ao carregar usuários: "+ e.getMessage());
         }
         return users;
@@ -56,13 +55,19 @@ public class UserDAO {
         String sql = "UPDATE users SET username = ?, email = ? WHERE id = ?";
 
         try (Connection connection = connectionFactory.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, newName);
             stmt.setString(2, newEmail);
             stmt.setInt(3, id);
-            stmt.executeUpdate();
-            System.out.println("Usuário #" + id + " atualizado com sucesso.");
-        }catch(SQLException e) {
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Usuário #" + id + " atualizado com sucesso.");
+                return;
+            }
+            System.out.println("Usuário #" + id + " não encontrado.");
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new RuntimeException("Dados duplicados. O Email ou nome de usuário já está em uso.", e);
+        } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar usuário: " + e.getMessage());
         }
     }
@@ -72,11 +77,15 @@ public class UserDAO {
 
         try(Connection connection = connectionFactory.getConnection();
         PreparedStatement stmt = connection.prepareStatement(sql)){
-            stmt.setString(1, String.valueOf(id));
-            stmt.executeUpdate();
-            System.out.println("Usuário #" + id + " deletado com sucesso.");
-        }catch (SQLException e){
-            throw new RuntimeException (e.getMessage());
+            stmt.setInt(1, id);
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Usuário #" + id + " deletado com sucesso.");
+                return;
+            }
+            System.out.println("Usuário #" + id + " não encontrado.");
+        } catch (SQLException e){
+            throw new RuntimeException ("Erro ao deletar usuário.", e);
         }
     }
 }
