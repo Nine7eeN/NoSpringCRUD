@@ -3,7 +3,6 @@ package application;
 import dao.UserDAO;
 import entities.User;
 
-import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Scanner;
 

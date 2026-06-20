@@ -1,8 +1,5 @@
 package application;
 
-import dao.UserDAO;
-import entities.User;
-
 import java.util.Scanner;
 
 public class Program {
