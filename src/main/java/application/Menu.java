@@ -2,6 +2,7 @@ package application;
 
 import dao.UserDAO;
 import entities.User;
+import services.ValidateEntries;
 
 import java.util.List;
 import java.util.Scanner;
@@ -24,19 +25,15 @@ public class Menu {
             case '1':
                 try {
                     System.out.println("Insira os dados do usuário a ser registrado: ");
-                    System.out.println("Ex: nome, email");
-                    String[] data = sc.nextLine().split(",");
+                    String[] data = ValidateEntries.validateSave(sc.nextLine());
                     User userToSave = new User(null, data[0].trim(), data[1].trim());
                     userDAO.save(userToSave);
-                } catch (ArrayIndexOutOfBoundsException e){
-                    System.out.println("Erro: você precisa inserir ao menos dois dados para cadastrar um usuário!");
-                    System.out.println("Voltando para a tela inicial...");
+                } catch (IllegalArgumentException e){
+                    System.out.println("Erro: " + e.getMessage() +
+                                        "\nVoltando para a tela inicial...");;
                 } catch (RuntimeException e){
-                    System.out.println("ERRO!");
-                    System.out.println("Tipo:" + e.getClass().getName());
-                    System.out.println("Mensagem" + e.getMessage());
-                    e.printStackTrace();
-                    System.out.println("Voltando para a tela inicial...");
+                    System.out.println("Erro inesperado. \n" +
+                                        "Voltando para a tela inicial...");
                 }
                 break;
             case '2':
@@ -49,11 +46,8 @@ public class Menu {
                     System.out.println("Aperte [Enter] para continuar.");
                     sc.nextLine();
                 } catch (RuntimeException e) {
-                    System.out.println("ERRO!");
-                    System.out.println("Tipo:" + e.getClass().getName());
-                    System.out.println("Mensagem" + e.getMessage());
-                    e.printStackTrace();
-                    System.out.println("Voltando para a tela inicial...");
+                    System.out.println("Erro inesperado. \n" +
+                            "Voltando para a tela inicial...");
                 }
                 break;
             case '3':
@@ -73,11 +67,8 @@ public class Menu {
                     System.out.println("Pressione [Enter] para voltar para a tela inicial.");
                     sc.nextLine();
                 } catch (RuntimeException e) {
-                    System.out.println("ERRO!");
-                    System.out.println("Tipo:" + e.getClass().getName());
-                    System.out.println("Mensagem" + e.getMessage());
-                    e.printStackTrace();
-                    System.out.println("Voltando para a tela inicial...");
+                    System.out.println("Erro inesperado. \n" +
+                            "Voltando para a tela inicial...");
                 }
                 break;
             case '4':
@@ -90,11 +81,8 @@ public class Menu {
                     System.out.println("Pressione [Enter] para voltar para a tela inicial.");
                     sc.nextLine();
                 } catch (RuntimeException e) {
-                    System.out.println("ERRO!");
-                    System.out.println("Tipo:" + e.getClass().getName());
-                    System.out.println("Mensagem" + e.getMessage());
-                    e.printStackTrace();
-                    System.out.println("Voltando para a tela inicial...");
+                    System.out.println("Erro inesperado. \n" +
+                            "Voltando para a tela inicial...");
                 }
                 break;
             case '0':
