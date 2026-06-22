@@ -3,6 +3,7 @@ package application;
 import dao.UserDAO;
 import entities.User;
 import services.ValidateEntries;
+import exceptions.UserNotFoundException;
 
 import java.util.List;
 import java.util.Scanner;
@@ -25,15 +26,15 @@ public class Menu {
             case '1':
                 try {
                     System.out.println("Insira os dados do usuário a ser registrado: ");
-                    String[] data = ValidateEntries.validateSave(sc.nextLine());
-                    User userToSave = new User(null, data[0].trim(), data[1].trim());
-                    userDAO.save(userToSave);
-                } catch (IllegalArgumentException e){
+                    String[] userData = ValidateEntries.validateUserData(sc.nextLine());
+                    int savedID = userDAO.save(userData);
+                    System.out.println("Usuário " + userData[0].trim() + " salvo com ID #" + savedID);
+                } catch (IllegalArgumentException | IllegalStateException e){
                     System.out.println("Erro: " + e.getMessage() +
                                         "\nVoltando para a tela inicial...");;
                 } catch (RuntimeException e){
-                    System.out.println("Erro inesperado. \n" +
-                                        "Voltando para a tela inicial...");
+                    System.out.println("Erro inesperado." +
+                                        "\nVoltando para a tela inicial...");
                 }
                 break;
             case '2':
@@ -53,36 +54,33 @@ public class Menu {
             case '3':
                 System.out.println("Insira o ID do usuário que deseja atualizar: ");
                 try  {
-                    int id = Integer.parseInt(sc.nextLine());
+                    int id = ValidateEntries.validateUserID(sc.nextLine());
                     System.out.println("Insira os novos dados do usuário: ");
-                    System.out.println("Ex: nome, email");
-                    String[] newData = sc.nextLine().split(",");
-                    userDAO.update(id, newData[0].trim(), newData[1].trim());
-                } catch (ArrayIndexOutOfBoundsException e){
-                    System.out.println("Erro: você precisa inserir ao menos dois dados para atualizar um usuário!");
-                    System.out.println("Pressione [Enter] para voltar para a tela inicial.");
-                    sc.nextLine();
-                } catch (NumberFormatException e) {
-                    System.out.println("Erro: Formato de ID inválido!");
-                    System.out.println("Pressione [Enter] para voltar para a tela inicial.");
-                    sc.nextLine();
-                } catch (RuntimeException e) {
-                    System.out.println("Erro inesperado. \n" +
-                            "Voltando para a tela inicial...");
+                    String[] newData = ValidateEntries.validateUserData(sc.nextLine());
+                    int updatedUserID = userDAO.update(id, newData[0].trim(), newData[1].trim());
+                    System.out.println("Usuário #" + updatedUserID + " atualizado com sucesso!");
+                } catch (IllegalArgumentException | UserNotFoundException e){
+                    System.out.println("Erro: " + e.getMessage() +
+                            "\nVoltando para a tela inicial...");
+                }
+                catch (RuntimeException e) {
+                    System.out.println("Erro inesperado." +
+                            "\nVoltando para a tela inicial...");
                 }
                 break;
             case '4':
                 System.out.println("Insira o ID do usuário que deseja excluir:");
                 try {
-                    int id = Integer.parseInt(sc.nextLine());
-                    userDAO.delete(id);
-                } catch (NumberFormatException e){
-                    System.out.println("Erro: Formato de ID inválido!");
-                    System.out.println("Pressione [Enter] para voltar para a tela inicial.");
-                    sc.nextLine();
-                } catch (RuntimeException e) {
-                    System.out.println("Erro inesperado. \n" +
-                            "Voltando para a tela inicial...");
+                    int id = ValidateEntries.validateUserID(sc.nextLine());
+                    int deletedUserID = userDAO.delete(id);
+                    System.out.println("Usuário #" + deletedUserID + " excluído com sucesso!");
+                } catch (IllegalArgumentException | UserNotFoundException e){
+                    System.out.println("Erro: " + e.getMessage() +
+                            "\nVoltando para a tela inicial...");
+                }
+                catch (RuntimeException e) {
+                    System.out.println("Erro inesperado." +
+                            "\nVoltando para a tela inicial...");
                 }
                 break;
             case '0':
