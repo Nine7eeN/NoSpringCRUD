@@ -45,7 +45,6 @@ public class Menu {
                     List<User> userList = userDAO.load();
                     if (userList.isEmpty()) {
                         System.out.println("Nenhum usuário encontrado.");
-                        break;
                     } else {
                         for (User user : userList) {
                             System.out.println(user);
