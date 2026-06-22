@@ -25,10 +25,12 @@ public class Menu {
         switch (option) {
             case '1':
                 try {
-                    System.out.println("Insira os dados do usuário a ser registrado: ");
-                    String[] userData = ValidateEntries.validateUserData(sc.nextLine());
-                    int savedID = userDAO.save(userData);
-                    System.out.println("Usuário " + userData[0].trim() + " salvo com ID #" + savedID);
+                    System.out.println("Insira o nome do usuário a ser registrado: ");
+                    String userName = ValidateEntries.validateUsername(sc.nextLine());
+                    System.out.println("Insira o Email do usuário a ser registrado: ");
+                    String userEmail = ValidateEntries.validateEmail(sc.nextLine());
+                    int savedID = userDAO.save(userName, userEmail);
+                    System.out.println("Usuário " + userName + " salvo com ID #" + savedID);
                 } catch (IllegalArgumentException | IllegalStateException e){
                     System.out.println("Erro: " + e.getMessage() +
                                         "\nVoltando para a tela inicial...");;
@@ -55,9 +57,11 @@ public class Menu {
                 System.out.println("Insira o ID do usuário que deseja atualizar: ");
                 try  {
                     int id = ValidateEntries.validateUserID(sc.nextLine());
-                    System.out.println("Insira os novos dados do usuário: ");
-                    String[] newData = ValidateEntries.validateUserData(sc.nextLine());
-                    int updatedUserID = userDAO.update(id, newData[0].trim(), newData[1].trim());
+                    System.out.println("Insira o novo nome de usuário: ");
+                    String username = ValidateEntries.validateUsername(sc.nextLine());
+                    System.out.println("Insira o novo email do usuário: ");
+                    String email = ValidateEntries.validateEmail(sc.nextLine());
+                    int updatedUserID = userDAO.update(id, username, email);
                     System.out.println("Usuário #" + updatedUserID + " atualizado com sucesso!");
                 } catch (IllegalArgumentException | UserNotFoundException e){
                     System.out.println("Erro: " + e.getMessage() +

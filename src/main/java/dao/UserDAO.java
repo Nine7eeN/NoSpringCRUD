@@ -11,13 +11,13 @@ import java.util.List;
 public class UserDAO {
     private final ConnectionFactory connectionFactory = new ConnectionFactory();
 
-    public int save(String[] userData){
+    public int save(String username, String email){
         String sql = "INSERT INTO users (username, email) VALUES (? , ?)";
 
         try (Connection connection = connectionFactory.getConnection();
             PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, userData[0]);
-            stmt.setString(2, userData[1]);
+            stmt.setString(1, username);
+            stmt.setString(2, email);
             stmt.executeUpdate();
 
             try (ResultSet result = stmt.getGeneratedKeys()) {

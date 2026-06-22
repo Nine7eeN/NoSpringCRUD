@@ -2,16 +2,19 @@ package services;
 
 public class ValidateEntries {
 
-    public static String[] validateUserData(String entry){
-        String[] validUserData = entry.split(",");
-        if (validUserData.length < 2) throw new IllegalArgumentException("Insira ao menos 2 dados de usuário.");
-        validUserData[0] = validUserData[0].trim();
-        validUserData[1] = validUserData[1].trim();
-        if (validUserData[0].isBlank()) throw new IllegalArgumentException("O nome de usuário não pode ser vazio.");
-        if (validUserData[0].length()<3) throw new IllegalArgumentException("O nome de usuário deve conter ao menos 3 caracteres.");
-        if (validUserData[1].isBlank()) throw new IllegalArgumentException("O email não pode ser vazio.");
-        if (!validUserData[1].matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.com$")) throw new IllegalArgumentException("O email deve conter um formato válido!");
-        return validUserData;
+    public static String validateUsername(String username){
+        String validUsername = username.trim();
+        if (validUsername.isBlank()) throw new IllegalArgumentException("O nome de usuário não pode estar vazio.");
+        if (validUsername.length()<3) throw new IllegalArgumentException("O nome de usuário deve conter ao menos 3 caracteres.");
+        if (!validUsername.matches("^[\\p{L} '-]+$")) throw new IllegalArgumentException("O nome de usuário não pode conter caracteres especiais.");
+        return validUsername;
+    }
+
+    public static String validateEmail(String email){
+        String validEmail = email.trim();
+        if (validEmail.isBlank()) throw new IllegalArgumentException("O campo de email não pode estar vazio.");
+        if (!validEmail.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.com$")) throw new IllegalArgumentException("O email deve conter um formato válido!");
+        return validEmail;
     }
 
     public static int validateUserID(String entry){
