@@ -43,14 +43,19 @@ public class Menu {
                 try {
                     System.out.println("Listando usuários...");
                     List<User> userList = userDAO.load();
-                    for (User user : userList) {
-                        System.out.println(user);
+                    if (userList.isEmpty()) {
+                        System.out.println("Nenhum usuário encontrado.");
+                        break;
+                    } else {
+                        for (User user : userList) {
+                            System.out.println(user);
+                        }
                     }
                     System.out.println("Aperte [Enter] para continuar.");
                     sc.nextLine();
                 } catch (RuntimeException e) {
-                    System.out.println("Erro inesperado. \n" +
-                            "Voltando para a tela inicial...");
+                    System.out.println("Erro inesperado. " +
+                            "\nVoltando para a tela inicial...");
                 }
                 break;
             case '3':
