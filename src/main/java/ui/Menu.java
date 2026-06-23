@@ -3,10 +3,12 @@ package ui;
 import dao.UserDAO;
 import entities.User;
 import exceptions.InvalidOptionException;
+import exceptions.NotUniqueException;
 import services.ValidateEntries;
 import exceptions.UserNotFoundException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Menu {
@@ -39,10 +41,12 @@ public class Menu {
                     String userEmail = ValidateEntries.validateEmail(sc.nextLine());
                     int savedID = userDAO.save(userName, userEmail);
                     System.out.println("Usuário " + userName + " salvo com ID #" + savedID);
-                } catch (IllegalArgumentException | IllegalStateException e){
+                } catch (IllegalArgumentException e){
                     System.out.println("Erro: " + e.getMessage());
+                } catch (NullPointerException | IllegalStateException | NoSuchElementException e){
+                    System.out.println("Erro grave: " + e.getMessage());
                 } catch (RuntimeException e){
-                    System.out.println("Erro inesperado: " + e.getMessage());
+                    System.out.println("Erro inesperado.");
                 }
                 break;
             case "2":
@@ -57,7 +61,7 @@ public class Menu {
                         }
                     }
                 } catch (RuntimeException e) {
-                    System.out.println("Erro inesperado: " + e.getMessage());
+                    System.out.println("Erro inesperado.");
                 }
                 break;
             case "3":
@@ -68,8 +72,10 @@ public class Menu {
                     System.out.println("Usuário encontrado: \n" + user);
                 } catch(UserNotFoundException e){
                     System.out.println("Erro: " + e.getMessage());
+                } catch(NullPointerException | IllegalStateException | NoSuchElementException e){
+                    System.out.println("Erro grave: " + e.getMessage());
                 } catch(RuntimeException e){
-                    System.out.println("Erro inesperado: " + e.getMessage());
+                    System.out.println("Erro inesperado.");
                 }
                 break;
             case "4":
@@ -82,10 +88,11 @@ public class Menu {
                     String email = ValidateEntries.validateEmail(sc.nextLine());
                     int updatedUserID = userDAO.update(id, username, email);
                     System.out.println("Usuário #" + updatedUserID + " atualizado com sucesso!");
-                } catch (IllegalArgumentException | UserNotFoundException e){
+                } catch (IllegalArgumentException | UserNotFoundException | NotUniqueException e){
                     System.out.println("Erro: " + e.getMessage());
-                }
-                catch (RuntimeException e) {
+                } catch(NullPointerException | IllegalStateException | NoSuchElementException e){
+                    System.out.println("Erro grave: " + e.getMessage());
+                } catch (RuntimeException e) {
                     System.out.println("Erro inesperado.");
                 }
                 break;
@@ -95,11 +102,12 @@ public class Menu {
                     int id = ValidateEntries.validateUserID(sc.nextLine());
                     int deletedUserID = userDAO.delete(id);
                     System.out.println("Usuário #" + deletedUserID + " excluído com sucesso!");
-                } catch (IllegalArgumentException | UserNotFoundException e){
+                } catch (IllegalArgumentException | UserNotFoundException | NotUniqueException e){
                     System.out.println("Erro: " + e.getMessage());
-                }
-                catch (RuntimeException e) {
-                    System.out.println("Erro inesperado: " + e.getMessage());
+                } catch(NullPointerException | IllegalStateException | NoSuchElementException e){
+                    System.out.println("Erro grave: " + e.getMessage());
+                }catch (RuntimeException e) {
+                    System.out.println("Erro inesperado.");
                 }
                 break;
             case "0":

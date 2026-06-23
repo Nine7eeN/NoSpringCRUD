@@ -2,6 +2,7 @@ package dao;
 
 import db.ConnectionFactory;
 import entities.User;
+import exceptions.NotUniqueException;
 import exceptions.UserNotFoundException;
 
 import java.sql.*;
@@ -27,7 +28,7 @@ public class UserDAO {
             }
             throw new IllegalStateException("O banco não retornou ID gerado.");
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new IllegalArgumentException("Dados duplicados. O Email ou nome de usuário já está em uso.", e);
+            throw new NotUniqueException("Dados duplicados. O Email ou nome de usuário já está em uso.");
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar usuário: " + e.getMessage());
         }
@@ -66,7 +67,7 @@ public class UserDAO {
             }
             throw new UserNotFoundException("Usuário #" + id + " não encontrado.");
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new RuntimeException("Dados duplicados. O Email ou nome de usuário já está em uso.", e);
+            throw new NotUniqueException("Dados duplicados. O Email ou nome de usuário já está em uso.");
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar usuário: " + e.getMessage());
         }
