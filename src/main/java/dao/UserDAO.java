@@ -87,4 +87,23 @@ public class UserDAO {
             throw new RuntimeException ("Erro ao deletar usuário.", e);
         }
     }
+
+    public User selectByID(Integer id){
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (Connection connection  = connectionFactory.getConnection();
+        PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setInt(1, id);
+            ResultSet result = stmt.executeQuery();
+            if (result.next()) {
+                User user = new User();
+                user.setUsername(result.getString("username"));
+                user.setEmail(result.getString("email"));
+                user.setId(result.getInt("id"));
+                return user;
+            }
+            throw new UserNotFoundException ("Usuário #" + id + " não encontrado.");
+        }catch (SQLException e){
+            throw new RuntimeException("Erro ao procurar usuário.", e);
+        }
+    }
 }

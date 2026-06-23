@@ -1,4 +1,4 @@
-package application;
+package ui;
 
 import dao.UserDAO;
 import entities.User;
@@ -10,13 +10,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
+    private static final UserDAO userDAO = new UserDAO();
+
     public static void openMenu(){
         System.out.println("===SISTEMA DE GERENCIAMENTO DE USUARIOS===");
         System.out.println("Escolha uma opção:");
         System.out.println("1. Cadastrar Usuário");
         System.out.println("2. Listar Usuários");
-        System.out.println("3. Atualizar Usuário");
-        System.out.println("4. Excluir Usuário");
+        System.out.println("3. Procurar Usuário");
+        System.out.println("4. Atualizar Usuário");
+        System.out.println("5. Excluir Usuário");
         System.out.println("0. Sair");
     }
 
@@ -26,7 +29,6 @@ public class Menu {
     }
 
     public static void chooseOption(String option, Scanner sc){
-        UserDAO userDAO = new UserDAO();
 
         switch (option) {
             case "1":
@@ -40,7 +42,7 @@ public class Menu {
                 } catch (IllegalArgumentException | IllegalStateException e){
                     System.out.println("Erro: " + e.getMessage());
                 } catch (RuntimeException e){
-                    System.out.println("Erro inesperado.");
+                    System.out.println("Erro inesperado: " + e.getMessage());
                 }
                 break;
             case "2":
@@ -55,10 +57,22 @@ public class Menu {
                         }
                     }
                 } catch (RuntimeException e) {
-                    System.out.println("Erro inesperado.");
+                    System.out.println("Erro inesperado: " + e.getMessage());
                 }
                 break;
             case "3":
+                System.out.println("Insira o ID do usuário que deseja procurar: ");
+                try {
+                    int id = ValidateEntries.validateUserID(sc.nextLine());
+                    User user = userDAO.selectByID(id);
+                    System.out.println("Usuário encontrado: \n" + user);
+                } catch(UserNotFoundException e){
+                    System.out.println("Erro: " + e.getMessage());
+                } catch(RuntimeException e){
+                    System.out.println("Erro inesperado: " + e.getMessage());
+                }
+                break;
+            case "4":
                 System.out.println("Insira o ID do usuário que deseja atualizar: ");
                 try  {
                     int id = ValidateEntries.validateUserID(sc.nextLine());
@@ -75,7 +89,7 @@ public class Menu {
                     System.out.println("Erro inesperado.");
                 }
                 break;
-            case "4":
+            case "5":
                 System.out.println("Insira o ID do usuário que deseja excluir:");
                 try {
                     int id = ValidateEntries.validateUserID(sc.nextLine());
@@ -85,7 +99,7 @@ public class Menu {
                     System.out.println("Erro: " + e.getMessage());
                 }
                 catch (RuntimeException e) {
-                    System.out.println("Erro inesperado.");
+                    System.out.println("Erro inesperado: " + e.getMessage());
                 }
                 break;
             case "0":
