@@ -1,21 +1,24 @@
 package application;
 
+import exceptions.InvalidOptionException;
+
 import java.util.Scanner;
 
 public class Program {
     public static void main(String[] args) {
-        char option = ' ';
+        String option = "";
         Scanner sc = new Scanner(System.in);
 
         do {
             try {
                 Menu.openMenu();
-                option = sc.nextLine().toUpperCase().charAt(0);
+                option = sc.nextLine();
                 Menu.chooseOption(option, sc);
-            }catch (StringIndexOutOfBoundsException e){
-                System.out.println("Escolha uma das opções.");
+                if (!"0".equals(option)) Menu.awaitConfirmation(sc);
+            }catch (InvalidOptionException e){
+                System.out.println("Erro: " + e.getMessage());
             }
-        } while (option != '0');
+        } while (!"0".equals(option));
 
         sc.close();
     }

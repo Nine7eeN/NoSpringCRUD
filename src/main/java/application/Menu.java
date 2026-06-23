@@ -2,6 +2,7 @@ package application;
 
 import dao.UserDAO;
 import entities.User;
+import exceptions.InvalidOptionException;
 import services.ValidateEntries;
 import exceptions.UserNotFoundException;
 
@@ -19,11 +20,16 @@ public class Menu {
         System.out.println("0. Sair");
     }
 
-    public static void chooseOption(char option, Scanner sc){
+    public static void awaitConfirmation(Scanner sc){
+        System.out.println("Pressione [Enter] para continuar.");
+        sc.nextLine();
+    }
+
+    public static void chooseOption(String option, Scanner sc){
         UserDAO userDAO = new UserDAO();
 
         switch (option) {
-            case '1':
+            case "1":
                 try {
                     System.out.println("Insira o nome do usuário a ser registrado: ");
                     String userName = ValidateEntries.validateUsername(sc.nextLine());
@@ -32,14 +38,12 @@ public class Menu {
                     int savedID = userDAO.save(userName, userEmail);
                     System.out.println("Usuário " + userName + " salvo com ID #" + savedID);
                 } catch (IllegalArgumentException | IllegalStateException e){
-                    System.out.println("Erro: " + e.getMessage() +
-                                        "\nVoltando para a tela inicial...");;
+                    System.out.println("Erro: " + e.getMessage());
                 } catch (RuntimeException e){
-                    System.out.println("Erro inesperado." +
-                                        "\nVoltando para a tela inicial...");
+                    System.out.println("Erro inesperado.");
                 }
                 break;
-            case '2':
+            case "2":
                 try {
                     System.out.println("Listando usuários...");
                     List<User> userList = userDAO.load();
@@ -50,14 +54,11 @@ public class Menu {
                             System.out.println(user);
                         }
                     }
-                    System.out.println("Aperte [Enter] para continuar.");
-                    sc.nextLine();
                 } catch (RuntimeException e) {
-                    System.out.println("Erro inesperado. " +
-                            "\nVoltando para a tela inicial...");
+                    System.out.println("Erro inesperado.");
                 }
                 break;
-            case '3':
+            case "3":
                 System.out.println("Insira o ID do usuário que deseja atualizar: ");
                 try  {
                     int id = ValidateEntries.validateUserID(sc.nextLine());
@@ -68,34 +69,30 @@ public class Menu {
                     int updatedUserID = userDAO.update(id, username, email);
                     System.out.println("Usuário #" + updatedUserID + " atualizado com sucesso!");
                 } catch (IllegalArgumentException | UserNotFoundException e){
-                    System.out.println("Erro: " + e.getMessage() +
-                            "\nVoltando para a tela inicial...");
+                    System.out.println("Erro: " + e.getMessage());
                 }
                 catch (RuntimeException e) {
-                    System.out.println("Erro inesperado." +
-                            "\nVoltando para a tela inicial...");
+                    System.out.println("Erro inesperado.");
                 }
                 break;
-            case '4':
+            case "4":
                 System.out.println("Insira o ID do usuário que deseja excluir:");
                 try {
                     int id = ValidateEntries.validateUserID(sc.nextLine());
                     int deletedUserID = userDAO.delete(id);
                     System.out.println("Usuário #" + deletedUserID + " excluído com sucesso!");
                 } catch (IllegalArgumentException | UserNotFoundException e){
-                    System.out.println("Erro: " + e.getMessage() +
-                            "\nVoltando para a tela inicial...");
+                    System.out.println("Erro: " + e.getMessage());
                 }
                 catch (RuntimeException e) {
-                    System.out.println("Erro inesperado." +
-                            "\nVoltando para a tela inicial...");
+                    System.out.println("Erro inesperado.");
                 }
                 break;
-            case '0':
+            case "0":
                 System.out.println("Saindo do sistema...");
                 break;
             default:
-                System.out.println("Opção inválida. Tente novamente.");
+                throw new InvalidOptionException("Opção inválida. Tente novamente.");
         }
     }
 }
