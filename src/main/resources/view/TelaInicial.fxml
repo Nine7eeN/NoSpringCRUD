@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane prefHeight="251.0" prefWidth="298.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="53.0" prefWidth="303.0" text="Hello JavaFX">
+         <font>
+            <Font name="System Bold Italic" size="36.0" />
+         </font></Label>
+    </children>
+</StackPane>
